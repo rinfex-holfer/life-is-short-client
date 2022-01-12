@@ -5,35 +5,32 @@ import {
     Link
 } from "react-router-dom";
 import { RecoilRoot } from 'recoil';
+import { QueryClient, QueryClientProvider } from 'react-query'
 import {routes} from "./routes";
 import {MainPage} from "./components/main-page/main-page";
+import {Calendar} from "./components/calendar/calendar";
+
+const queryClient = new QueryClient()
 
 export const App = () => {
-
     return <RecoilRoot>
-        <Router>
-            <div>
-                <ul>
-                    <li><Link to={routes.ROOT}>main page</Link></li>
-                    <li><Link to={routes.PAGE_1}>page 1</Link></li>
-                    <li><Link to={routes.PAGE_2}>page 2</Link></li>
-                </ul>
+        <QueryClientProvider client={queryClient}>
+            <Router>
+                <div>
+                    <ul>
+                        <li><Link to={routes.MAIN}>main page</Link></li>
+                        <li><Link to={routes.CALENDAR}>calendar</Link></li>
+                    </ul>
 
-                <Route path={routes.ROOT} exact={true}>
-                    <MainPage />
-                </Route>
+                    <Route path={routes.MAIN} exact={true}>
+                        <MainPage />
+                    </Route>
 
-                <Route path={routes.PAGE_1}>
-                    <Page1 />
-                </Route>
-
-                <Route path={routes.PAGE_2}>
-                    <Page2 />
-                </Route>
-            </div>
-        </Router>
+                    <Route path={routes.CALENDAR}>
+                        <Calendar />
+                    </Route>
+                </div>
+            </Router>
+        </QueryClientProvider>
     </RecoilRoot>
 }
-
-const Page1 = () => <div>page 1 content</div>
-const Page2 = () => <div>page 2 content</div>
