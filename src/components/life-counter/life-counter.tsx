@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import CSS from './life-counter.module.css'
-import {User} from "../../domain";
 import {getProductiveYearsLeft, getYearsLeft, getYearsSpent} from "../../utils/date";
 import {getUser} from "../../domain/api/user";
 import {useQuery} from "react-query";

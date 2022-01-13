@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    margin: 10px;
+}
+
+.itemSpent {
+    color: dimgray;
+    border-color: gray;
+}
+
+.itemActive {
+    font-weight: bold;
+    outline: 1px solid black;
+}
