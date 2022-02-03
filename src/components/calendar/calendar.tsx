@@ -55,3 +55,8 @@ export function CalendarYear() {
         )}
     </div>
 }
+
+export function WeeksOfLife() {
+    const now = Date.now()
+
+}
