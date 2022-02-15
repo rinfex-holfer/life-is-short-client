@@ -14,6 +14,13 @@
     margin: 10px;
 }
 
+.itemSmall {
+    width: 5px;
+    height: 5px;
+    border: 1px solid black;
+    margin: 2px;
+}
+
 .itemSpent {
     color: dimgray;
     border-color: gray;
@@ -22,4 +29,8 @@
 .itemActive {
     font-weight: bold;
     outline: 1px solid black;
+}
+
+.itemSmall.itemActive {
+    outline: 2px solid black;
 }

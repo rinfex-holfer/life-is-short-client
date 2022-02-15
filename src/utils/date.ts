@@ -11,24 +11,24 @@ import {getLocale} from "./locale";
 
 export function getYearsLeft(dateOfBirth: Date, lifespanInYears: number): string {
     const dateOfDeath = add(dateOfBirth, {years: lifespanInYears})
-    const yearsLeft = formatDistanceToNowStrict(dateOfDeath, {unit: "year", locale: getLocale()})
-    return yearsLeft
+    return formatDistanceToNowStrict(dateOfDeath, {unit: "year", locale: getLocale()})
 }
 
 export function getProductiveYearsLeft(dateOfBirth: Date, lifespanInYears: number): string {
     const dateOfDeath = add(dateOfBirth, {years: lifespanInYears - 15})
-    const yearsLeft = formatDistanceToNowStrict(dateOfDeath, {unit: "year", locale: getLocale()})
-    return yearsLeft
+    return formatDistanceToNowStrict(dateOfDeath, {unit: "year", locale: getLocale()})
 }
 
 export function getYearsSpent(dateOfBirth: Date): string {
-    const yearsLeft = formatDistanceToNowStrict(dateOfBirth, {unit: "year", locale: getLocale()})
-    return yearsLeft
+    return formatDistanceToNowStrict(dateOfBirth, {unit: "year", locale: getLocale()})
 }
 
-export function getWeeksSpent(dateOfBirth: Date, lifespanInYears: number): string {
+export function getLifeInWeeks(dateOfBirth: Date, lifespanInYears: number) {
     const dateOfDeath = add(dateOfBirth, {years: lifespanInYears})
-    const now = new Date();
-    const weeksSpent = differenceInCalendarWeeks(dateOfBirth, now)
-    const weeksLeft = differenceInCalendarWeeks(now, dateOfDeath)
+    return differenceInCalendarWeeks(dateOfDeath, dateOfBirth)
+}
+
+export function getCurrentLifeWeek(dateOfBirth: Date): number {
+    const now = new Date()
+    return differenceInCalendarWeeks(now, dateOfBirth)
 }
