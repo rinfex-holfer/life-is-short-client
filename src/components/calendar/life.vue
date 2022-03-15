@@ -1,15 +1,16 @@
 <script lang="ts">
 import {getCurrentLifeWeek, getLifeInWeeks} from "../../utils/date";
-import {store} from "../../store";
+import {currentUser} from "../../store";
 import {defineComponent} from "vue";
 
 export default defineComponent({
   name: "LifeCalendar",
   data: () => ({
-    user: store.user
+    user: currentUser
   }),
   computed: {
     lifeInWeeks() {
+      console.log(this.user);
       if (!this.user) return 0
       return getLifeInWeeks(this.user.dateOfBirth, this.user.expectedLifespan)
     },

@@ -1,12 +1,11 @@
 <script lang="ts">
+export default { name: "WeekCalendar" }
+</script>
+
+<script setup lang="ts">
 import {getDay} from "date-fns";
 
-export default {
-  name: "WeekCalendar",
-  data: () => ({
-    day: getDay(Date.now())
-  })
-}
+const day = getDay(Date.now())
 </script>
 
 <template>

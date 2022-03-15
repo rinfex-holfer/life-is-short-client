@@ -1,21 +1,13 @@
 <script lang="ts">
-import {getISOWeek, getISOWeeksInYear} from "date-fns";
-import {defineComponent} from "vue";
+export default { name: "YearCalendar" }
+</script>
 
-export default defineComponent({
-  name: "YearCalendar",
-  data: () => ({
-    now: Date.now(),
-  }),
-  computed: {
-    weeksInYear() {
-      return getISOWeeksInYear(this.now);
-    },
-    week() {
-      return getISOWeek(this.now)
-    }
-  }
-})
+<script setup lang="ts">
+import {getISOWeek, getISOWeeksInYear} from "date-fns";
+
+const now = Date.now()
+const weeksInYear = getISOWeeksInYear(now)
+const week = getISOWeek(now)
 </script>
 
 <template>

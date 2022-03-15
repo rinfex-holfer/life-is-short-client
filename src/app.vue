@@ -3,12 +3,12 @@
 
 import AppNav from "./app-nav.vue";
 import {getUser} from "./domain/api/user";
-import {store} from "./store";
+import {currentUser} from "./store";
 export default {
   components: {AppNav},
   mounted() {
     getUser("default").then(user => {
-      store.user = user
+      currentUser.value = user
     })
   }
 }

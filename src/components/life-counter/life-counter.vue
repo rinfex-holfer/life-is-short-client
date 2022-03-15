@@ -1,31 +1,24 @@
-<script lang="ts">
+<script lang="ts" setup>
 import {getProductiveYearsLeft, getYearsLeft, getYearsSpent} from "../../utils/date";
-import {store} from "../../store";
-import {defineComponent} from "vue";
+import {currentUser} from "../../store";
+import {computed} from "vue";
 
-export default defineComponent({
-  name: "LifeCounter",
-  data: () => ({
-    user: store.user
-  }),
-  computed: {
-    lifeYearsLeft() {
-      const user = this.user
-      if (!user) return "-"
-      return getYearsLeft(user.dateOfBirth, user.expectedLifespan)
-    },
-    productiveYearsLeft() {
-      const user = this.user
-      if (!user) return "-"
-      return getProductiveYearsLeft(user.dateOfBirth, user.expectedLifespan)
-    },
-    yearsSpent() {
-      const user = this.user
-      if (!user) return "-"
-      return getYearsSpent(user.dateOfBirth)
-    },
+const lifeYearsLeft = computed(() => {
+  const user = currentUser.value
+  if (!user) return "-"
+  return getYearsLeft(user.dateOfBirth, user.expectedLifespan)
+})
 
-  }
+const productiveYearsLeft = computed(() => {
+  const user = currentUser.value
+  if (!user) return "-"
+  return getProductiveYearsLeft(user.dateOfBirth, user.expectedLifespan)
+})
+
+const yearsSpent = computed(() => {
+  const user = currentUser.value
+  if (!user) return "-"
+  return getYearsSpent(user.dateOfBirth)
 })
 </script>
 

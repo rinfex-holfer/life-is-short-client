@@ -1,10 +1,4 @@
-import {reactive} from "vue";
+import {ref} from "vue";
 import {User} from "./domain";
 
-interface Store {
-    user: User | undefined
-}
-
-export const store = reactive<Store>({
-    user: undefined,
-})
+export const currentUser = ref<User | undefined>(undefined)

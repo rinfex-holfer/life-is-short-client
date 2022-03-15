@@ -1,20 +1,9 @@
-<script>
+<script setup lang="ts">
 import {getDate, getDaysInMonth} from "date-fns";
 
-export default {
-  name: "MonthCalendar",
-  data: () => ({
-    now: Date.now()
-  }),
-  computed: {
-    daysInMonth() {
-      return getDaysInMonth(this.now)
-    },
-    dayOfMonth() {
-      return getDate(this.now)
-    },
-  }
-}
+const now = Date.now()
+const daysInMonth = getDaysInMonth(now)
+const dayOfMonth = getDate(now)
 </script>
 
 <template>
