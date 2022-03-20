@@ -7,15 +7,23 @@ export type User = {
     locale: LangKey
 }
 
-type Calendar = {
+export type WeekCalendar = {
+    year: number
+    weeks: Week[]
+}[]
 
-}
-
-type Day = {
+export type Day = {
     timestamp: string
     smile?: string
     color?: string
     posts?: Post[]
+}
+
+export type Week = {
+    numInYear: number,
+    numInLife: number
+    starts: string,
+    ends: string,
 }
 
 type Post = {
