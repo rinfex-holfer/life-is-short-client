@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    padding: 30px;
 }
 
 .item {
@@ -14,6 +15,13 @@
     margin: 10px;
 }
 
+.itemSmall {
+    width: 10px;
+    height: 10px;
+    border: 1px solid black;
+    margin: 4px;
+}
+
 .itemSpent {
     color: dimgray;
     border-color: gray;
@@ -22,4 +30,8 @@
 .itemActive {
     font-weight: bold;
     outline: 1px solid black;
+}
+
+.itemSmall.itemActive {
+    outline: 2px solid black;
 }
