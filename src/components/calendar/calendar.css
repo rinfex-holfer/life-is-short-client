@@ -35,3 +35,19 @@
 .itemSmall.itemActive {
     outline: 2px solid black;
 }
+
+.life {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lifeRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.lifeRowYear {
+    width: 20px
+}

@@ -12,14 +12,14 @@ import {Week, WeekCalendar} from "../../domain";
 const lifeInWeeks = computed((): WeekCalendar => {
   const user = currentUser.value
   if (!user) return []
-  const c = createLifeYearsWithWeeks(user.dateOfBirth, user.expectedLifespan)
-  console.log(c);
   return createLifeYearsWithWeeks(user.dateOfBirth, user.expectedLifespan)
 })
 
 const currentWeek = computed(() => {
   const user = currentUser.value
   if (!user) return 0
+  // TODO fix this shit - doesn't work with createLifeYearsWithWeeks
+  console.log(getCurrentLifeWeek(user.dateOfBirth))
   return getCurrentLifeWeek(user.dateOfBirth)
 })
 
@@ -41,11 +41,12 @@ function hideYear() {
 
 <template>
   <div>{{hoveredDate ? hoveredDate : '-'}}</div>
-  <div class="container" v-on:mouseleave="hideYear">
-    <template
+  <div v-on:mouseleave="hideYear" class="life">
+    <div
+        class="lifeRow"
         v-for="year in lifeInWeeks"
     >
-        <span>{{year.year}}</span>
+        <span class="lifeRowYear">{{year.year}}</span>
         <span
           v-for="week in year.weeks"
           class="item itemSmall"
@@ -56,7 +57,7 @@ function hideYear() {
           v-on:mouseover="showWeek(week)"
         >
         </span>
-    </template>
+    </div>
   </div>
 </template>
 
