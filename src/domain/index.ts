@@ -22,8 +22,8 @@ export type Day = {
 export type Week = {
     numInYear: number,
     numInLife: number
-    starts: string,
-    ends: string,
+    starts: Date,
+    ends: Date,
 }
 
 type Post = {

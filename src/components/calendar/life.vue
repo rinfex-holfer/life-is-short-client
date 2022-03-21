@@ -3,11 +3,12 @@ import {
   createCalendarYearsWithWeeks,
   createLifeYearsWithWeeks,
   getCurrentLifeWeek,
-  getLifeInWeeks
+  getLifeInWeeks, getYearsSpent, getYearsSpentNum, numF
 } from "../../utils/date";
 import {currentUser} from "../../store";
 import {computed, ref} from "vue";
 import {Week, WeekCalendar} from "../../domain";
+import {compareAsc, compareDesc, getYear} from "date-fns";
 
 const lifeInWeeks = computed((): WeekCalendar => {
   const user = currentUser.value
@@ -18,9 +19,19 @@ const lifeInWeeks = computed((): WeekCalendar => {
 const currentWeek = computed(() => {
   const user = currentUser.value
   if (!user) return 0
-  // TODO fix this shit - doesn't work with createLifeYearsWithWeeks
-  console.log(getCurrentLifeWeek(user.dateOfBirth))
-  return getCurrentLifeWeek(user.dateOfBirth)
+  const now = new Date()
+  const currYearOfLife = getYearsSpentNum(user.dateOfBirth) + 1
+
+  console.log("currYearOfLife", currYearOfLife)
+  console.log("lifeInWeeks.value", lifeInWeeks.value, lifeInWeeks.value[currYearOfLife-1])
+  const currentLifeWeek = lifeInWeeks.value[currYearOfLife-1]
+      .weeks
+      .find(week => compareAsc(week.starts, now) !== 1 && compareAsc(week.ends, now) !== -1)
+
+  console.log("currentLifeWeek", currentLifeWeek)
+
+  if (!currentLifeWeek) return 0
+  return currentLifeWeek.numInLife
 })
 
 let hoveredDate = ref<null | string>(null)
@@ -30,7 +41,7 @@ function showYear(year: number) {
 }
 
 function showWeek(week: Week) {
-  hoveredDate.value = `${week.starts} - ${week.ends} ${week.numInYear} ${week.numInLife}`
+  hoveredDate.value = `${numF(week.starts)} - ${numF(week.ends)} ${week.numInYear} ${week.numInLife}`
 }
 
 function hideYear() {

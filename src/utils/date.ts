@@ -1,11 +1,11 @@
 import {
-    add, addDays, addYears, compareAsc, differenceInCalendarDays, differenceInCalendarWeeks, format,
+    add, addDays, addYears, compareAsc, differenceInCalendarDays, differenceInCalendarWeeks, differenceInYears, format,
     formatDistanceToNowStrict, getDayOfYear,
     getISODay,
     getISOWeek,
     getISOWeeksInYear, getWeek,
     getWeekOfMonth,
-    getWeeksInMonth, getYear, nextDay
+    getWeeksInMonth, getYear, isSunday, nextDay
 } from 'date-fns'
 import {getLocale} from "./locale";
 import {Day, Week, WeekCalendar} from "../domain";
@@ -24,7 +24,11 @@ export function getYearsSpent(dateOfBirth: Date): string {
     return formatDistanceToNowStrict(dateOfBirth, {unit: "year", locale: getLocale()})
 }
 
-function f(date: Date) {
+export function getYearsSpentNum(dateOfBirth: Date): number {
+    return differenceInYears(new Date(), dateOfBirth)
+}
+
+export function numF(date: Date) {
     return format(date, 'dd.MM.yyyy')
 }
 
@@ -41,8 +45,8 @@ export function createCalendarYearsWithWeeks(dateOfBirth: Date, lifespanInYears:
     let week: Week = {
         numInYear: currentWeek,
         numInLife: weekInLife,
-        starts: f(date),
-        ends: f(nextDay(date, 0)),
+        starts: date,
+        ends: nextDay(date, 0),
     }
     const calendar: WeekCalendar = [{
         year: yearOfBirth,
@@ -60,8 +64,8 @@ export function createCalendarYearsWithWeeks(dateOfBirth: Date, lifespanInYears:
             currentWeek = weekOfNextDate
             weekInLife++
             week = {
-                starts: f(nextDate),
-                ends: f(addDays(nextDate, 6)),
+                starts: nextDate,
+                ends: addDays(nextDate, 6),
                 numInLife: weekInLife,
                 numInYear: currentWeek
             }
@@ -88,7 +92,6 @@ export function createLifeYearsWithWeeks(dateOfBirth: Date, lifespanInYears: num
     const calendar: WeekCalendar = []
     let nextYear = 1
     let nextBday = addYears(dateOfBirth, 1)
-    console.log(nextBday)
 
     for (let year = 1; year <= lifespanInYears; year++) {
         calendar.push({
@@ -97,7 +100,9 @@ export function createLifeYearsWithWeeks(dateOfBirth: Date, lifespanInYears: num
         })
 
         for (let i = 1; i <= 53; i++) {
-            const nextSunday = nextDay(weekStartDay, 0)
+            const nextSunday = isSunday(weekStartDay) // if week starts on Sunday (it might happen after bDay), it is 1 day long
+                ? weekStartDay
+                : nextDay(weekStartDay, 0)
 
             let endDate = compareAsc(nextSunday, nextBday) === 1
                 ? nextBday
@@ -107,8 +112,8 @@ export function createLifeYearsWithWeeks(dateOfBirth: Date, lifespanInYears: num
             calendar[calendar.length - 1].weeks.push({
                 numInYear: i,
                 numInLife: weekInLife++,
-                starts: f(weekStartDay),
-                ends: f(endDate),
+                starts: weekStartDay,
+                ends: endDate,
             })
 
             weekStartDay = addDays(endDate, 1)
