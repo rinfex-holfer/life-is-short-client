@@ -26,6 +26,9 @@ export type Week = {
     ends: Date,
 }
 
-type Post = {
+type Post = {}
 
+export type LifeStage = {
+    fromTo: [number, number]
+    color: string
 }
