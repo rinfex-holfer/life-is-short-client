@@ -1,14 +1,23 @@
 import {
-    add, addDays, addYears, compareAsc, differenceInCalendarDays, differenceInCalendarWeeks, differenceInYears, format,
-    formatDistanceToNowStrict, getDayOfYear,
-    getISODay,
-    getISOWeek,
-    getISOWeeksInYear, getWeek,
-    getWeekOfMonth,
-    getWeeksInMonth, getYear, isSunday, nextDay
+    add,
+    addDays,
+    addYears,
+    compareAsc,
+    differenceInCalendarWeeks,
+    differenceInYears,
+    format,
+    formatDistanceToNowStrict,
+    getWeek,
+    getYear,
+    isSunday,
+    nextDay,
+    setHours,
+    setMilliseconds,
+    setMinutes,
+    setSeconds,
 } from 'date-fns'
 import {getLocale} from "./locale";
-import {Day, Week, WeekCalendar} from "../domain";
+import {Week, WeekCalendar} from "../domain";
 
 export function getYearsLeft(dateOfBirth: Date, lifespanInYears: number): string {
     const dateOfDeath = add(dateOfBirth, {years: lifespanInYears})
@@ -86,8 +95,25 @@ export function createCalendarYearsWithWeeks(dateOfBirth: Date, lifespanInYears:
     return calendar
 }
 
+function getStartOfDay(day: Date): Date {
+    day = setHours(day, 0)
+    day = setMinutes(day, 0)
+    day = setSeconds(day, 0)
+    day = setMilliseconds(day, 1)
+    return day;
+}
+
+function getEndOfDay(day: Date): Date {
+    day = setHours(day, 23)
+    day = setMinutes(day, 59)
+    day = setSeconds(day, 59)
+    day = setMilliseconds(day, 999)
+    return day;
+}
+
 export function createLifeYearsWithWeeks(dateOfBirth: Date, lifespanInYears: number): WeekCalendar {
-    let weekStartDay = dateOfBirth
+    let weekStartDay = getStartOfDay(dateOfBirth)
+
     let weekInLife = 1
     const calendar: WeekCalendar = []
     let nextYear = 1
@@ -108,12 +134,11 @@ export function createLifeYearsWithWeeks(dateOfBirth: Date, lifespanInYears: num
                 ? nextBday
                 : nextSunday
 
-
             calendar[calendar.length - 1].weeks.push({
                 numInYear: i,
                 numInLife: weekInLife++,
-                starts: weekStartDay,
-                ends: endDate,
+                starts: getStartOfDay(weekStartDay),
+                ends: getEndOfDay(endDate),
             })
 
             weekStartDay = addDays(endDate, 1)

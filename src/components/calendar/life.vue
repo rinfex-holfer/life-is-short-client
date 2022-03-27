@@ -8,7 +8,7 @@ import {
 import {currentUser} from "../../store";
 import {computed, ref} from "vue";
 import {LifeStage, Week, WeekCalendar} from "../../domain";
-import {compareAsc, compareDesc, getYear} from "date-fns";
+import {compareAsc, compareDesc, getDate, getDayOfYear, getISODay, getYear, isAfter, isBefore, isEqual} from "date-fns";
 
 const stages: LifeStage[] = [
   {fromTo: [0, 12], color: "#f6d5b1"},
@@ -41,7 +41,7 @@ const currentLifeWeek = computed(() => {
 
   const week = lifeInWeeks.value[currLifeYear.value-1]
       .weeks
-      .find(week => compareAsc(week.starts, now) !== 1 && compareAsc(week.ends, now) !== -1)
+      .find(week => !isAfter(week.starts, now) && !isAfter(now, week.ends))
 
   if (!week) return 0
   return week.numInLife
