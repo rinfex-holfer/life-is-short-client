@@ -1,14 +1,15 @@
 <script lang="ts" setup>
-import {
-  createCalendarYearsWithWeeks,
-  createLifeYearsWithWeeks,
-  getCurrentLifeWeek,
-  getLifeInWeeks, getYearsSpent, getYearsSpentNum, numF
-} from "../../utils/date";
+import {getYearsSpentNum, numF} from "../../utils/date";
 import {currentUser} from "../../store";
 import {computed, ref} from "vue";
 import {LifeStage, Week, WeekCalendar} from "../../domain";
-import {compareAsc, compareDesc, getDate, getDayOfYear, getISODay, getYear, isAfter, isBefore, isEqual} from "date-fns";
+import {isAfter} from "date-fns";
+import {createLifeYearsWithWeeks} from "../../utils/calendars";
+
+
+const dateOfBirth = new Date(2000, 0, 1)
+const yearInWeeks = createLifeYearsWithWeeks(dateOfBirth, 1)
+console.log(yearInWeeks)
 
 const stages: LifeStage[] = [
   {fromTo: [0, 12], color: "#f6d5b1"},
