@@ -1,31 +1,33 @@
 import {describe, expect, it} from "vitest";
 import {createLifeYearsWithWeeks} from "./calendars";
+import {addYears, endOfDay, subDays} from "date-fns";
 
 const leapYear = 2000
 const nonLeapYear = 2001
 
-describe("life in weeks", () => {
-    describe("starting with non-leap year", function() {
-        const year = nonLeapYear
-        const dateOfBirth = new Date(year, 0, 1)
-        const yearInWeeks = createLifeYearsWithWeeks(dateOfBirth, 1)
+describe("lifeYearsWithWeeks calendar", () => {
+    const startYear = nonLeapYear
+    const startMonth = 0
+    const startDate = 1
+    const lifespanInYears = 100
 
-        it('year contains 53 weeks', function () {
-            expect(yearInWeeks[0].year).eq(year)
-            expect(yearInWeeks[0].weeks).eq(53)
-        });
+    const dateOfBirth = new Date(startYear, startMonth, startDate)
+    const yearInWeeks = createLifeYearsWithWeeks(dateOfBirth, lifespanInYears)
 
-        // it('last day of life - birthday', function () {
-        //     expect(yearInWeeks.length).eq(2)
-        //     expect(yearInWeeks[1].year).eq(year+1)
-        //     expect(yearInWeeks[1].weeks.length).eq(1)
-        //     expect(yearInWeeks[1].weeks[0].starts).eq(new Date(year+1, 0, 1))
-        // });
+    it("years amount equals lifespan", () => {
+        expect(yearInWeeks.length).eq(lifespanInYears)
     })
-    //
-    // it('each year in 100 years contains 53 weeks', function() {
-    //     const dateOfBirth = new Date(leapYear, 0, 1)
-    //     const yearInWeeks = createLifeYearsWithWeeks(dateOfBirth, 100)
-    //     expect(yearInWeeks.length).eq(101)
-    // })
+
+    it("each life year has 53 weeks, ends the day before next b-day", () => {
+        yearInWeeks.forEach((year, i) => {
+            expect(year.numInLife).eq(i+1)
+            expect(year.weeks.length).eq(53)
+            expect(year.weeks[52].numInYear).eq(53)
+            expect(year.weeks[52].numInLife).eq(i*53 + 53)
+
+            const lastDayExpected = endOfDay(subDays(addYears(dateOfBirth, lifespanInYears), 1))
+            const lastDayByCalendar = yearInWeeks[lifespanInYears-1].weeks[52].ends
+            expect(lastDayByCalendar.toString()).eq(lastDayExpected.toString())
+        })
+    })
 })

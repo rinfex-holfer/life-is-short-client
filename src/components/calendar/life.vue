@@ -2,7 +2,7 @@
 import {getYearsSpentNum, numF} from "../../utils/date";
 import {currentUser} from "../../store";
 import {computed, ref} from "vue";
-import {LifeStage, Week, WeekCalendar} from "../../domain";
+import {LifeStage, Week, YearWeekLifeCalendar} from "../../domain";
 import {isAfter} from "date-fns";
 import {createLifeYearsWithWeeks} from "../../utils/calendars";
 
@@ -23,7 +23,7 @@ function getYearColor(year: number) {
   return stages.find(s => s.fromTo[0] <= year && s.fromTo[1] >= year)?.color || "black"
 }
 
-const lifeInWeeks = computed((): WeekCalendar => {
+const lifeInWeeks = computed((): YearWeekLifeCalendar => {
   const user = currentUser.value
   if (!user) return []
   return createLifeYearsWithWeeks(user.dateOfBirth, user.expectedLifespan)
@@ -51,7 +51,7 @@ const currentLifeWeek = computed(() => {
 let hoveredDate = ref<null | string>(null)
 
 function showWeek(week: Week) {
-  hoveredDate.value = `${numF(week.starts)} - ${numF(week.ends)} ${week.numInYear} ${week.numInLife}`
+  hoveredDate.value = `${numF(week.starts)} - ${numF(week.ends)} | № в году:${week.numInYear} | № в жизни:${week.numInLife}`
 }
 
 function hideYear() {
@@ -61,14 +61,16 @@ function hideYear() {
 </script>
 
 <template>
-  <div>{{hoveredDate ? hoveredDate : '-'}}</div>
+  <div class="selectedWeek">{{hoveredDate ? hoveredDate : '-'}}</div>
   <div v-on:mouseleave="hideYear" class="life">
     <div
         class="lifeRow"
-        :style="{background: getYearColor(year.year)}"
+        :style="{background: getYearColor(year.numInLife)}"
         v-for="year in lifeInWeeks"
     >
-        <span class="lifeRowYear" :class="{lifeRowYearSpent: year.year < currLifeYear}">{{year.year}}</span>
+        <span class="lifeRowYear" :class="{lifeRowYearSpent: year.numInLife < currLifeYear}">{{
+            year.numInLife
+          }}</span>
         <span
           v-for="week in year.weeks"
           class="item itemSmall"
@@ -102,5 +104,13 @@ function hideYear() {
 
 .lifeRowYearSpent {
   color: grey;
+}
+
+.selectedWeek {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  background: white;
+  padding: 5px;
 }
 </style>
