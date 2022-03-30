@@ -17,10 +17,10 @@
 }
 
 .itemSmall {
-    width: 10px;
-    height: 10px;
+    width: 15px;
+    height: 15px;
     border: 1px solid black;
-    margin: 4px;
+    margin: 4px 4px;
 }
 
 .itemSpent {

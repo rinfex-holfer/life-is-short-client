@@ -71,7 +71,8 @@ function hideYear() {
         <span class="lifeRowYear" :class="{lifeRowYearSpent: year.numInLife < currLifeYear}">{{
             year.numInLife
           }}</span>
-        <span
+        <router-link
+          :to="`/calendar/week?num=${week.numInLife}`"
           v-for="week in year.weeks"
           class="item itemSmall"
           :class="{
@@ -80,7 +81,7 @@ function hideYear() {
           }"
           v-on:mouseover="showWeek(week)"
         >
-        </span>
+        </router-link>
     </div>
   </div>
 </template>
