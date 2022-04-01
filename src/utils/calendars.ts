@@ -1,4 +1,4 @@
-import {Week, YearWeekLifeCalendar} from "../domain";
+import {LifeWeek, YearWeekLifeCalendar} from "../domain";
 import {
     add,
     addDays,
@@ -23,7 +23,7 @@ export function createCalendarYearsWithWeeks(dateOfBirth: Date, lifespanInYears:
     let currentWeek = getWeek(date)
     let currentYear = yearOfBirth;
 
-    let week: Week = {
+    let week: LifeWeek = {
         numInYear: currentWeek,
         numInLife: weekInLife,
         starts: date,

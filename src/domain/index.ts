@@ -1,33 +1,36 @@
 import {LangKey} from "../utils/locale";
 
 export type User = {
+    id: string,
     name: string
-    dateOfBirth: Date
+    dateOfBirth: string
     expectedLifespan: number // in years
     locale: LangKey
 }
 
 export type YearWeekLifeCalendar = {
     numInLife: number
-    weeks: Week[]
+    weeks: LifeWeek[]
 }[]
 
-export type Week = {
-    numInYear: number,
+export type LifeWeek = {
+    numInYear: number
     numInLife: number
     starts: Date,
     ends: Date,
 }
 
-export type Day = {
+export type LifeDay = {
     timestamp: string
     smile?: string
     color?: string
 }
 
 type Post = {
-    uId: number,
-    timestamp: Date,
+    id: string
+    userId: string,
+    timestamp: string,
+    title?: string
     body: string
 }
 
@@ -38,21 +41,28 @@ export type LifeStage = {
 
 type DbTables = {
     users: {
-        uId: string
+        userId: string
         name: string
         dateOfBirth: string
         expectedLifespan: number
         locale: LangKey
     },
     days: {
-        uId: string
+        userId: string
         timestamp: string // simplified? Like "12-03-2012"
         smile?: string
         color?: string
     },
     posts: {
-        uId: string
-        timestamp: string
+        id: string
+        userId: string,
+        timestamp: string,
+        title?: string
         body: string
     }
+}
+
+interface Api {
+    getDays: (firstDay: string, lastDay: string) => LifeDay[]
+    getPosts: (firstDay: string, lastDay: string) => Post[]
 }

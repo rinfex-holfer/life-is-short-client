@@ -1,12 +1,8 @@
 <script lang="ts" setup>
 import {numF} from "../../utils/date";
-import {lifeInWeeks, currLifeYear, currentLifeWeek} from "../../store";
+import {lifeInWeeks, currLifeYear, currentLifeWeekNumber} from "../../store";
 import {ref} from "vue";
-import {LifeStage, Week} from "../../domain";
-import {createLifeYearsWithWeeks} from "../../utils/calendars";
-
-const dateOfBirth = new Date(2000, 0, 1)
-const yearInWeeks = createLifeYearsWithWeeks(dateOfBirth, 1)
+import {LifeStage, LifeWeek} from "../../domain";
 
 const stages: LifeStage[] = [
   {fromTo: [0, 12], color: "#f6d5b1"},
@@ -22,15 +18,13 @@ function getYearColor(year: number) {
 
 let hoveredDate = ref<null | string>(null)
 
-function showWeek(week: Week) {
+function showWeek(week: LifeWeek) {
   hoveredDate.value = `${numF(week.starts)} - ${numF(week.ends)} | № в году:${week.numInYear} | № в жизни:${week.numInLife}`
 }
 
 function hideYear() {
   hoveredDate.value = null
 }
-
-const weekNumInLife: number = currentLifeWeek.value?.numInLife || 0
 
 </script>
 
@@ -50,8 +44,8 @@ const weekNumInLife: number = currentLifeWeek.value?.numInLife || 0
           v-for="week in year.weeks"
           class="item itemSmall"
           :class="{
-            itemActive: week.numInLife === weekNumInLife,
-            itemSpent: week.numInLife < weekNumInLife,
+            itemActive: week.numInLife === currentLifeWeekNumber,
+            itemSpent: week.numInLife < currentLifeWeekNumber,
           }"
           v-on:mouseover="showWeek(week)"
         >

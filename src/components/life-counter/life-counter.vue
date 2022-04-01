@@ -5,20 +5,17 @@ import {computed} from "vue";
 
 const lifeYearsLeft = computed(() => {
   const user = currentUser.value
-  if (!user) return "-"
-  return getYearsLeft(user.dateOfBirth, user.expectedLifespan)
+  return getYearsLeft(new Date(user.dateOfBirth), user.expectedLifespan)
 })
 
 const productiveYearsLeft = computed(() => {
   const user = currentUser.value
-  if (!user) return "-"
-  return getProductiveYearsLeft(user.dateOfBirth, user.expectedLifespan)
+  return getProductiveYearsLeft(new Date(user.dateOfBirth), user.expectedLifespan)
 })
 
 const yearsSpent = computed(() => {
   const user = currentUser.value
-  if (!user) return "-"
-  return getYearsSpent(user.dateOfBirth)
+  return getYearsSpent(new Date(user.dateOfBirth))
 })
 </script>
 
