@@ -1,15 +1,12 @@
 <script lang="ts" setup>
-import {getYearsSpentNum, numF} from "../../utils/date";
-import {currentUser} from "../../store";
-import {computed, ref} from "vue";
-import {LifeStage, Week, YearWeekLifeCalendar} from "../../domain";
-import {isAfter} from "date-fns";
+import {numF} from "../../utils/date";
+import {lifeInWeeks, currLifeYear, currentLifeWeek} from "../../store";
+import {ref} from "vue";
+import {LifeStage, Week} from "../../domain";
 import {createLifeYearsWithWeeks} from "../../utils/calendars";
-
 
 const dateOfBirth = new Date(2000, 0, 1)
 const yearInWeeks = createLifeYearsWithWeeks(dateOfBirth, 1)
-console.log(yearInWeeks)
 
 const stages: LifeStage[] = [
   {fromTo: [0, 12], color: "#f6d5b1"},
@@ -23,31 +20,6 @@ function getYearColor(year: number) {
   return stages.find(s => s.fromTo[0] <= year && s.fromTo[1] >= year)?.color || "black"
 }
 
-const lifeInWeeks = computed((): YearWeekLifeCalendar => {
-  const user = currentUser.value
-  if (!user) return []
-  return createLifeYearsWithWeeks(user.dateOfBirth, user.expectedLifespan)
-})
-
-const currLifeYear = computed(() => {
-  const user = currentUser.value
-  if (!user) return 0
-  return getYearsSpentNum(user.dateOfBirth) + 1
-})
-
-const currentLifeWeek = computed(() => {
-  const user = currentUser.value
-  if (!user) return 0
-  const now = new Date()
-
-  const week = lifeInWeeks.value[currLifeYear.value-1]
-      .weeks
-      .find(week => !isAfter(week.starts, now) && !isAfter(now, week.ends))
-
-  if (!week) return 0
-  return week.numInLife
-})
-
 let hoveredDate = ref<null | string>(null)
 
 function showWeek(week: Week) {
@@ -57,6 +29,8 @@ function showWeek(week: Week) {
 function hideYear() {
   hoveredDate.value = null
 }
+
+const weekNumInLife: number = currentLifeWeek.value?.numInLife || 0
 
 </script>
 
@@ -72,12 +46,12 @@ function hideYear() {
             year.numInLife
           }}</span>
         <router-link
-          :to="`/calendar/week?num=${week.numInLife}`"
+          :to="`/calendar/week/${week.numInLife}`"
           v-for="week in year.weeks"
           class="item itemSmall"
           :class="{
-            itemActive: week.numInLife === currentLifeWeek,
-            itemSpent: week.numInLife < currentLifeWeek,
+            itemActive: week.numInLife === weekNumInLife,
+            itemSpent: week.numInLife < weekNumInLife,
           }"
           v-on:mouseover="showWeek(week)"
         >

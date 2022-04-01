@@ -18,7 +18,7 @@ const routes = [
             { path: '', component: LifeCalendar },
             { path: 'year', component: YearCalendar },
             { path: 'month', component: MonthCalendar },
-            { path: 'week', component: WeekCalendar },
+            { path: 'week/:weekNum', component: WeekCalendar },
         ]
     },
 ]

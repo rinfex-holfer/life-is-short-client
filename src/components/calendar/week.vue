@@ -3,11 +3,12 @@ export default { name: "WeekCalendar" }
 </script>
 
 <script setup lang="ts">
-import {getDay} from "date-fns";
+
 
 </script>
 
 <template>
+  <div>{{$route.params.weekNum}}</div>
   <div class="container">
     <span
         class="item"
