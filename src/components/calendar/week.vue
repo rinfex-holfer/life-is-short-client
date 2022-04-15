@@ -1,58 +1,82 @@
 <script setup lang="ts">
 
-import {currentLifeWeek, lifeInWeeks} from "../../store";
+import {currentTime, lifeInWeeks} from "../../store";
 import {getDays} from "../../domain/api/days";
-import {ref} from "vue";
+import {computed, ref, watchEffect} from "vue";
 import {LifeDay} from "../../domain";
 import {addDays, format, isAfter, isBefore, isSameDay} from "date-fns";
 import {useRoute} from "vue-router";
+import {getLocale} from "../../utils/locale";
 
-type DayView = LifeDay & {
-  isSpent: boolean,
-  isCurrent: boolean,
+type DaysExtended = LifeDay & {
+  state: DayState
+  label: string
+}
+
+enum DayState {
+  SPENT,
+  UNSPENT,
+  CURRENT
+}
+
+function getDayState(day: Date, today: Date): DayState {
+  if (isSameDay(today, day)) return DayState.CURRENT
+  else if (isBefore(day, today)) return DayState.SPENT
+  return DayState.UNSPENT
 }
 
 const route = useRoute()
-
 const weekNum = +route.params.weekNum
-const yearOfSelectedWeek = lifeInWeeks.value.find(year => {
-  const isYearOfSelectedWeek = year.weeks[0].numInLife <= weekNum
-      && year.weeks[year.weeks.length - 1].numInLife >= weekNum
-  return isYearOfSelectedWeek
-})
-const week = yearOfSelectedWeek?.weeks.find(w => w.numInLife === weekNum)
 
-const days = ref([] as DayView[])
+const yearOfSelectedWeek = computed(() => lifeInWeeks.value.find(year =>
+    year.weeks[0].numInLife <= weekNum
+    && year.weeks[year.weeks.length - 1].numInLife >= weekNum
+))
 
-const today = new Date()
+const selectedWeek = computed(() => yearOfSelectedWeek.value?.weeks.find(w => w.numInLife === weekNum))
 
-if (week) {
-  getDays(week.starts.toISOString(), week.ends.toISOString()).then(d => {
-    const loadedDaysMap = d.reduce((map, nextDay) => {
-      map.set(nextDay.timestamp, nextDay)
-      return map;
-    }, new Map<string, LifeDay>())
+const daysExtended = ref<DaysExtended[]>([])
 
-    const daysArr = [] as DayView[]
+watchEffect(async function loadDays () {
+  if (!selectedWeek.value) {
+    daysExtended.value = []
+    return;
+  }
 
-    let nextDay = week.starts
+  const weekValue = selectedWeek.value;
 
-    while (!isAfter(nextDay, week.ends)) {
-      const timestamp = format(nextDay, "dd-MM-yyyy")
-      const loadedDay = loadedDaysMap.get(timestamp) || {}
-      const day: DayView = {
-        ...loadedDay,
-        timestamp: format(nextDay, "dd-MM-yyyy"),
-        isCurrent: isSameDay(today, nextDay) ,
-        isSpent: isBefore(nextDay, today)
-      }
-      daysArr.push(day)
-      nextDay =  addDays(nextDay, 1)
+  let apiDays: LifeDay[] = []
+  try {
+    apiDays = await getDays(weekValue.starts.toISOString(), weekValue.ends.toISOString())
+  } catch (e) {
+    daysExtended.value = []
+    return;
+  }
+
+  const loadedDaysMap = apiDays.reduce((map, nextDay) => {
+    map.set(nextDay.timestamp, nextDay)
+    return map;
+  }, new Map<string, LifeDay>())
+
+  const daysArr = [] as DaysExtended[]
+
+  let nextDay = weekValue.starts
+
+  while (!isAfter(nextDay, weekValue.ends)) {
+    const timestamp = format(nextDay, "dd-MM-yyyy")
+    const loadedDay = loadedDaysMap.get(timestamp) || {}
+    const day: DaysExtended = {
+      ...loadedDay,
+      timestamp: format(nextDay, "dd-MM-yyyy"),
+      state: getDayState(nextDay, currentTime.value),
+      label: format(nextDay, "eeeeee", {locale: getLocale()}).toUpperCase()
     }
+    daysArr.push(day)
+    nextDay = addDays(nextDay, 1)
+  }
 
-    days.value = daysArr
-  })
-}
+  daysExtended.value = daysArr
+})
 
 </script>
 
@@ -62,12 +86,12 @@ if (week) {
     <span
         class="item"
         :class="{
-          itemActive: day.isCurrent,
-          itemSpent: day.isSpent
+          itemActive: day.state === DayState.CURRENT,
+          itemSpent: day.state === DayState.SPENT
         }"
-        v-for="day in days"
+        v-for="day in daysExtended"
     >
-        {{ day.timestamp }}
+        {{ day.label }}
     </span>
   </div>
 </template>

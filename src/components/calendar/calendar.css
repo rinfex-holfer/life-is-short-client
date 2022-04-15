@@ -3,6 +3,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     padding: 30px;
+    justify-content: center;
 }
 
 .item {
@@ -17,8 +18,8 @@
 }
 
 .itemSmall {
-    width: 15px;
-    height: 15px;
+    width: 8px;
+    height: 8px;
     border: 1px solid black;
     margin: 4px 4px;
 }
