@@ -13,6 +13,7 @@ export default {
 <template>
   <h1>Life is short</h1>
   <LifeCounter/>
+  <router-link to="/calendar">Календарь</router-link>
 </template>
 
 <style scoped>

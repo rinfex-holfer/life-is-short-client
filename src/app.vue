@@ -1,11 +1,10 @@
 <script lang="ts">
-// import {routes} from "./routes";
-
+import Popup from "./components/popup/popup.vue"
 import AppNav from "./app-nav.vue";
 import {getUser} from "./domain/api/user";
 import {currentUser} from "./store";
 export default {
-  components: {AppNav},
+  components: {AppNav, Popup},
   mounted() {
     getUser("default").then(user => {
       currentUser.value = user
@@ -16,7 +15,7 @@ export default {
 </script>
 
 <template>
-<!--  <h1>{{ appName }}</h1>-->
-  <app-nav/>
+<!--  <app-nav/>-->
+  <Popup/>
   <router-view></router-view>
 </template>
