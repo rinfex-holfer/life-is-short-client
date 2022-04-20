@@ -8,10 +8,12 @@ export type User = {
     locale: LangKey
 }
 
-export type YearWeekLifeCalendar = {
+export type YearWeekLifeCalendar = YearInLifeWeeks[]
+
+export type YearInLifeWeeks = {
     numInLife: number
     weeks: LifeWeek[]
-}[]
+}
 
 export type LifeWeek = {
     numInYear: number

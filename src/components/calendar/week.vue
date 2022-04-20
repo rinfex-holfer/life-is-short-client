@@ -2,22 +2,23 @@
 
 import {lifeInWeeks} from "../../store";
 import {computed, ref, watch} from "vue";
-import {useRoute} from "vue-router";
-import {openPopup} from "../popup/open-popup";
-import {PopupKey} from "../popup/popup-key";
+import {openModal} from "../modal/open-modal";
+import {ModalKey} from "../modal/modal-key";
 import {DayState, LifeDayExtended, loadDays} from "../../domain/services/days";
 
-const route = useRoute()
+const props = defineProps<{
+  weekNum: number
+}>()
 
 const yearOfSelectedWeek = computed(() => {
   return lifeInWeeks.value.find(year =>
-      year.weeks[0].numInLife <= +route.params.weekNum
-      && year.weeks[year.weeks.length - 1].numInLife >= +route.params.weekNum
+      year.weeks[0].numInLife <= props.weekNum
+      && year.weeks[year.weeks.length - 1].numInLife >= props.weekNum
   )
 })
 
 const selectedWeek = computed(() => {
-  return yearOfSelectedWeek.value?.weeks.find(w => w.numInLife === +route.params.weekNum)
+  return yearOfSelectedWeek.value?.weeks.find(w => w.numInLife === props.weekNum)
 })
 
 const daysExtended = ref<LifeDayExtended[]>([])
@@ -31,7 +32,7 @@ async function reloadDays() {
 watch(selectedWeek, reloadDays, {immediate: true})
 
 function onDayClick(day: LifeDayExtended) {
-  openPopup(PopupKey.JOURNAL)
+  openModal(ModalKey.JOURNAL)
 }
 
 </script>
