@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import {numF} from "../../utils/date";
 import {lifeInWeeks, currLifeYear, currentLifeWeekNumber} from "../../store";
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import {LifeStage, LifeWeek, YearInLifeWeeks} from "../../domain";
 import {useRouter} from "vue-router";
 import Week from "./week.vue";
+import Popup from "../popup/popup.vue"
 
 const stages: LifeStage[] = [
   {fromTo: [0, 12], color: "#f6d5b1"},
@@ -35,7 +36,10 @@ function onYearHovered(year: YearInLifeWeeks) {
 }
 
 const selectedWeek = ref<number | null>(null)
-function onWeekClick(week: LifeWeek) {
+const weekCoord = reactive<{x: number, y: number}>({x: 0, y: 0})
+function onWeekClick(week: LifeWeek, e: MouseEvent) {
+  weekCoord.x = (e.target as HTMLElement)?.offsetLeft || 0
+  weekCoord.y = ((e.target as HTMLElement)?.offsetTop - 10) || 0
   selectedWeek.value = week.numInLife
   // router.push(`/calendar/week/${week.numInLife}`)
 }
@@ -46,15 +50,16 @@ function onWeekClick(week: LifeWeek) {
   <div class="selectedWeek">{{hoveredDate ? hoveredDate : '-'}}</div>
   <div v-on:mouseleave="hideYear" class="life">
 
-    <div v-if="selectedWeek !== null" class="week">
+    <Popup v-if="selectedWeek !== null" :x="weekCoord.x" :y="weekCoord.y">
       <Week :week-num="selectedWeek" />
-    </div>
+    </Popup>
 
     <div
         class="lifeRow"
         :class="{lifeRowHovered: hoveredYear === year.numInLife}"
         :style="{background: getYearColor(year.numInLife)}"
         v-for="year in lifeInWeeks"
+        :[data-year-num]="year.numInLife"
         @mouseover="onYearHovered(year)"
     >
 
@@ -73,7 +78,7 @@ function onWeekClick(week: LifeWeek) {
             itemSpent: week.numInLife < currentLifeWeekNumber,
           }"
           @mouseover="showWeek(week)"
-          @click="onWeekClick(week)"
+          @click="onWeekClick(week, $event)"
         >
         </span>
 
@@ -94,6 +99,7 @@ function onWeekClick(week: LifeWeek) {
 
 <style scoped>
 .life {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
