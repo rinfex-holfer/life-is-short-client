@@ -1,9 +1,9 @@
-import {LifeWeek, YearWeekLifeCalendar} from "../domain";
+import {LifeWeek, YearMonthLifeCalendar, YearWeekLifeCalendar} from "../domain";
 import {
     add,
     addDays,
     addYears,
-    endOfDay,
+    endOfDay, getMonth,
     getWeek,
     getYear,
     isAfter,
@@ -102,6 +102,37 @@ export function createLifeYearsWithWeeks(dateOfBirth: Date, lifespanInYears: num
         }
         nextBday = addYears(nextBday, 1)
         dayBeforNextBday = subDays(nextBday, 1)
+    }
+
+    return calendar
+}
+
+export function createLifeYearsWithMonths(dateOfBirth: Date, lifespanInYears: number): YearMonthLifeCalendar {
+    let monthInLife = 1
+    let month = getMonth(dateOfBirth)
+    let year = getYear(dateOfBirth)
+    const calendar: YearMonthLifeCalendar = []
+
+    for (let lifeYear = 1; lifeYear <= lifespanInYears; lifeYear++) {
+        calendar.push({
+            numInLife: lifeYear,
+            months: []
+        })
+
+        for (let i = 0; i <= 11; i++) {
+            calendar[calendar.length - 1].months.push({
+                numInLifeYear: i,
+                numInLife: monthInLife++,
+                year,
+                month
+            })
+
+            month++
+            if (month === 12) {
+                month = 0
+                year++
+            }
+        }
     }
 
     return calendar

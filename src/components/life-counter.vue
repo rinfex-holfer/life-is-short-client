@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import {getProductiveYearsLeft, getYearsLeft, getYearsSpent} from "../../utils/date";
-import {currentUser} from "../../store";
+import {getProductiveYearsLeft, getYearsLeft, getYearsSpent} from "../utils/date";
+import {currentUser} from "../store";
 import {computed} from "vue";
 
 const lifeYearsLeft = computed(() => {

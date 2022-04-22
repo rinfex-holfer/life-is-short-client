@@ -9,10 +9,16 @@ export type User = {
 }
 
 export type YearWeekLifeCalendar = YearInLifeWeeks[]
+export type YearMonthLifeCalendar = YearInLifeMonths[]
 
 export type YearInLifeWeeks = {
     numInLife: number
     weeks: LifeWeek[]
+}
+
+export type YearInLifeMonths = {
+    numInLife: number
+    months: LifeMonth[]
 }
 
 export type LifeWeek = {
@@ -20,6 +26,13 @@ export type LifeWeek = {
     numInLife: number
     starts: Date,
     ends: Date,
+}
+
+export type LifeMonth = {
+    year: number
+    month: number
+    numInLifeYear: number
+    numInLife: number
 }
 
 export type LifeDay = {

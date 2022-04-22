@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
-import {lifeInWeeks} from "../../store";
+import {lifeInWeeks} from "../store";
 import {computed, ref, watch} from "vue";
-import {openModal} from "../modal/open-modal";
-import {ModalKey} from "../modal/modal-key";
-import {DayState, LifeDayExtended, loadDays} from "../../domain/services/days";
+import {openModal} from "./modal/open-modal";
+import {ModalKey} from "./modal/modal-key";
+import {DayState, LifeDayExtended, loadDays} from "../domain/services/days";
+import {dateFormatDayMonth, dateFormatNum, dateFormatYear} from "../utils/date";
 
 const props = defineProps<{
   weekNum: number
@@ -38,9 +39,11 @@ function onDayClick(day: LifeDayExtended) {
 </script>
 
 <template>
-  <div>Неделя номер: {{selectedWeek?.numInLife}}</div>
-  <div></div>
-  <div class="container">
+  <div class="weekTitle">
+    {{ dateFormatDayMonth(selectedWeek.starts) }} - {{ dateFormatDayMonth(selectedWeek.ends) }}
+    {{ dateFormatYear(selectedWeek.ends) }}
+  </div>
+  <div class="container weekContainer">
     <span
         class="item"
         :class="{
@@ -55,4 +58,4 @@ function onDayClick(day: LifeDayExtended) {
   </div>
 </template>
 
-<style src="./calendar.css" />
+<style src="calendar/calendar.css" />

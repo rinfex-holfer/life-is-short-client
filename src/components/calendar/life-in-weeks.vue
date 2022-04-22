@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import {numF} from "../../utils/date";
+import {dateFormatNum} from "../../utils/date";
 import {lifeInWeeks, currLifeYear, currentLifeWeekNumber} from "../../store";
 import {reactive, ref} from "vue";
 import {LifeStage, LifeWeek, YearInLifeWeeks} from "../../domain";
-import {useRouter} from "vue-router";
-import Week from "./week.vue";
-import Popup from "../popup/popup.vue"
+import Week from "../week.vue";
+import Popup from "../popup.vue"
 
 const stages: LifeStage[] = [
   {fromTo: [0, 12], color: "#f6d5b1"},
@@ -19,38 +18,35 @@ function getYearColor(year: number) {
   return stages.find(s => s.fromTo[0] <= year && s.fromTo[1] >= year)?.color || "black"
 }
 
-const router = useRouter()
-const hoveredDate = ref<null | string>(null)
+const hoveredWeek = ref<null | string>(null)
 const hoveredYear = ref<null | number>(null)
-
-function showWeek(week: LifeWeek) {
-  hoveredDate.value = `${numF(week.starts)} - ${numF(week.ends)} | № в году:${week.numInYear} | № в жизни:${week.numInLife}`
-}
-
-function hideYear() {
-  hoveredDate.value = null
-}
-
-function onYearHovered(year: YearInLifeWeeks) {
-  hoveredYear.value = year.numInLife
-}
-
 const selectedWeek = ref<number | null>(null)
 const weekCoord = reactive<{x: number, y: number}>({x: 0, y: 0})
-function onWeekClick(week: LifeWeek, e: MouseEvent) {
-  weekCoord.x = (e.target as HTMLElement)?.offsetLeft || 0
-  weekCoord.y = ((e.target as HTMLElement)?.offsetTop - 10) || 0
+
+const showHoveredWeek = (week: LifeWeek) =>
+  hoveredWeek.value = `${dateFormatNum(week.starts)} - ${dateFormatNum(week.ends)} | № в году:${week.numInYear} | № в жизни:${week.numInLife}`
+const hideYear = () => hoveredWeek.value = null
+const onYearHovered = (year: YearInLifeWeeks) => hoveredYear.value = year.numInLife
+
+const selectWeek = (week: LifeWeek, year: YearInLifeWeeks, e: MouseEvent) => {
+  const row: HTMLElement | null = document.querySelector(`[data-year-num="${year.numInLife}"]`)
+  weekCoord.x = e.target ? (e.target as HTMLElement).offsetLeft + 3 : 0
+  weekCoord.y = row ? (row.offsetTop - 20) : 0
   selectedWeek.value = week.numInLife
-  // router.push(`/calendar/week/${week.numInLife}`)
 }
+const deselectWeek = () => selectedWeek.value = null
 
 </script>
 
 <template>
-  <div class="selectedWeek">{{hoveredDate ? hoveredDate : '-'}}</div>
+<!--  <div class="selectedWeek">{{hoveredDate ? hoveredDate : '-'}}</div>-->
   <div v-on:mouseleave="hideYear" class="life">
-
-    <Popup v-if="selectedWeek !== null" :x="weekCoord.x" :y="weekCoord.y">
+    <Popup
+        v-if="selectedWeek !== null"
+        :x="weekCoord.x"
+        :y="weekCoord.y"
+        :on-close="deselectWeek"
+    >
       <Week :week-num="selectedWeek" />
     </Popup>
 
@@ -59,7 +55,7 @@ function onWeekClick(week: LifeWeek, e: MouseEvent) {
         :class="{lifeRowHovered: hoveredYear === year.numInLife}"
         :style="{background: getYearColor(year.numInLife)}"
         v-for="year in lifeInWeeks"
-        :[data-year-num]="year.numInLife"
+        :data-year-num="year.numInLife"
         @mouseover="onYearHovered(year)"
     >
 
@@ -76,23 +72,12 @@ function onWeekClick(week: LifeWeek, e: MouseEvent) {
           :class="{
             itemActive: week.numInLife === currentLifeWeekNumber,
             itemSpent: week.numInLife < currentLifeWeekNumber,
+            itemSelected: week.numInLife === selectedWeek
           }"
-          @mouseover="showWeek(week)"
-          @click="onWeekClick(week, $event)"
+          @mouseover="showHoveredWeek(week)"
+          @click="selectWeek(week, year, $event)"
         >
         </span>
-
-<!--      <router-link-->
-<!--          :to="`/calendar/week/${week.numInLife}`"-->
-<!--          v-for="week in year.weeks"-->
-<!--          class="item itemSmall"-->
-<!--          :class="{-->
-<!--            itemActive: week.numInLife === currentLifeWeekNumber,-->
-<!--            itemSpent: week.numInLife < currentLifeWeekNumber,-->
-<!--          }"-->
-<!--          v-on:mouseover="showWeek(week)"-->
-<!--      >-->
-<!--      </router-link>-->
     </div>
   </div>
 </template>
@@ -128,13 +113,5 @@ function onWeekClick(week: LifeWeek, e: MouseEvent) {
 
 .lifeRowYearSpent {
   color: grey;
-}
-
-.selectedWeek {
-  position: fixed;
-  left: 20px;
-  bottom: 20px;
-  background: white;
-  padding: 5px;
 }
 </style>

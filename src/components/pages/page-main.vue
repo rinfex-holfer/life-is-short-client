@@ -1,5 +1,5 @@
 <script>
-import LifeCounter from "../life-counter/life-counter.vue";
+import LifeCounter from "../life-counter.vue";
 
 export default {
   name: "main-page",

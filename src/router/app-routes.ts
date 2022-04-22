@@ -1,9 +1,9 @@
-import MainPage from "../components/main-page/main-page.vue";
+import MainPage from "../components/pages/page-main.vue";
 import Calendar from "../components/calendar/calendar.vue";
-import LifeCalendar from "../components/calendar/life.vue";
+import LifeCalendar from "../components/calendar/life-in-months.vue";
 import YearCalendar from "../components/calendar/year.vue";
-import MonthCalendar from "../components/calendar/month.vue";
-import WeekCalendar from "../components/calendar/week.vue";
+import MonthCalendar from "../components/month.vue";
+import WeekCalendar from "../components/week.vue";
 
 export const appRoutes = [
     { path: '/', component: MainPage },
@@ -13,7 +13,7 @@ export const appRoutes = [
         children: [
             { path: '', component: LifeCalendar },
             { path: 'year', component: YearCalendar },
-            { path: 'month', component: MonthCalendar },
+            { path: 'month/:monthNum', component: MonthCalendar },
             { path: 'week/:weekNum', component: WeekCalendar },
         ]
     },

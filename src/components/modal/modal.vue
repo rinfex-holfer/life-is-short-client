@@ -3,7 +3,7 @@ import {RouteLocationNormalized, useRouter} from "vue-router";
 import {ModalKey} from "./modal-key";
 import {removeRouterQueries} from "../../router/remove-router-queries";
 import {computed, VueElement} from "vue";
-import Journal from "../journal/journal.vue";
+import Journal from "../journal.vue";
 
 const popupMap: Record<ModalKey, VueElement> = {
   [ModalKey.JOURNAL]: Journal,

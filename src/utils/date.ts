@@ -19,6 +19,18 @@ export function getYearsSpentNum(dateOfBirth: Date): number {
     return differenceInYears(new Date(), dateOfBirth)
 }
 
-export function numF(date: Date) {
+export function dateFormatNum(date: Date) {
     return format(date, 'dd.MM.yyyy')
+}
+
+export function dateFormatDayMonth(date: Date) {
+    return format(date, 'dd MMMM', {locale: getLocale()})
+}
+
+export function dateFormatYear(date: Date) {
+    return format(date, 'yyyy', {locale: getLocale()})
+}
+
+export function dateFormatMonthYear(date: Date) {
+    return format(date, 'LLLL yyyy', {locale: getLocale()})
 }

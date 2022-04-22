@@ -10,7 +10,7 @@ export async function getUser(id: string): Promise<User> {
         dateOfBirth: "1990-11-26T23:00:00.000Z",
         // name: "Федор Федорович",
         // dateOfBirth: new Date(2000, 0, 1),
-        expectedLifespan: 70,
+        expectedLifespan: 74,
         locale: LangKey.RU,
     }
 }

@@ -1,8 +1,8 @@
 import {computed, Ref, ref, watchEffect} from "vue";
-import {LifeWeek, User, YearWeekLifeCalendar} from "./domain";
-import {createLifeYearsWithWeeks} from "./utils/calendars";
+import {LifeMonth, LifeWeek, User, YearMonthLifeCalendar, YearWeekLifeCalendar} from "./domain";
+import {createLifeYearsWithMonths, createLifeYearsWithWeeks} from "./utils/calendars";
 import {getYearsSpentNum} from "./utils/date";
-import {isAfter} from "date-fns";
+import {getMonth, isAfter} from "date-fns";
 import {LangKey} from "./utils/locale";
 
 export const currentUser = ref<User>({
@@ -20,6 +20,11 @@ export const currentTime = ref<Date>(new Date())
 export const lifeInWeeks = computed(() => {
     const birthDate = new Date(currentUser.value.dateOfBirth);
     return createLifeYearsWithWeeks(birthDate, currentUser.value.expectedLifespan)
+})
+
+export const lifeInMonths = computed<YearMonthLifeCalendar>(() => {
+    const birthDate = new Date(currentUser.value.dateOfBirth);
+    return createLifeYearsWithMonths(birthDate, currentUser.value.expectedLifespan)
 })
 
 export const currLifeYear = computed(() => {
@@ -42,6 +47,23 @@ export const currentLifeWeek = computed<LifeWeek>(() => {
     return week
 })
 
-export const currentLifeWeekNumber = computed(() => {
-    return currentLifeWeek.value?.numInLife || 0
+export const currentLifeMonth = computed<LifeMonth>(() => {
+    const now = new Date()
+    const currentMonthNum = getMonth(now)
+
+    const month = lifeInMonths.value[currLifeYear.value-1]
+        .months
+        .find(month => month.month === currentMonthNum)
+
+    if (!month) {
+        console.error("no current life month")
+        const lastYear = lifeInMonths.value[lifeInMonths.value.length - 1]
+        return lastYear.months[lastYear.months.length - 1]
+    }
+
+    return month
 })
+
+export const currentLifeWeekNumber = computed(() => currentLifeWeek.value.numInLife)
+
+export const currentLifeMonthNumber = computed(() =>  currentLifeMonth.value.numInLife)
