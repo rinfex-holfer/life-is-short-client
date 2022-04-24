@@ -24,5 +24,3 @@ const week = getISOWeek(now)
     </span>
   </div>
 </template>
-
-<style src="./calendar.css" />

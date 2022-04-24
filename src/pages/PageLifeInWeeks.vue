@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import {dateFormatNum} from "../../utils/date";
-import {lifeInWeeks, currLifeYear, currentLifeWeekNumber} from "../../store";
+import {dateFormatNum} from "../utils/date";
+import {lifeInWeeks, currLifeYear, currentLifeWeekNumber} from "../store";
 import {reactive, ref} from "vue";
-import {LifeStage, LifeWeek, YearInLifeWeeks} from "../../domain";
-import Week from "../week.vue";
-import Popup from "../popup.vue"
+import {LifeStage, LifeWeek, YearInLifeWeeks} from "../domain";
+import Week from "../components/Week.vue";
+import Popup from "../components/Popup.vue"
+import AppNavigation from "../components/AppNavigation/AppNavigation.vue"
 
 const stages: LifeStage[] = [
   {fromTo: [0, 12], color: "#f6d5b1"},
@@ -39,6 +40,7 @@ const deselectWeek = () => selectedWeek.value = null
 </script>
 
 <template>
+  <AppNavigation/>
 <!--  <div class="selectedWeek">{{hoveredDate ? hoveredDate : '-'}}</div>-->
   <div v-on:mouseleave="hideYear" class="life">
     <Popup
@@ -60,19 +62,19 @@ const deselectWeek = () => selectedWeek.value = null
     >
 
         <span
-            class="lifeRowYear"
-            :class="{lifeRowYearSpent: year.numInLife < currLifeYear}"
+            class="life-row-year"
+            :class="{'life-row-year--spent': year.numInLife < currLifeYear}"
         >
           {{year.numInLife}}
         </span>
 
         <span
           v-for="week in year.weeks"
-          class="item itemSmall"
+          class="life-item life-item--small"
           :class="{
-            itemActive: week.numInLife === currentLifeWeekNumber,
-            itemSpent: week.numInLife < currentLifeWeekNumber,
-            itemSelected: week.numInLife === selectedWeek
+            'life-item--active': week.numInLife === currentLifeWeekNumber,
+            'life-item--spent': week.numInLife < currentLifeWeekNumber,
+            'life-item--selected': week.numInLife === selectedWeek
           }"
           @mouseover="showHoveredWeek(week)"
           @click="selectWeek(week, year, $event)"
@@ -99,19 +101,19 @@ const deselectWeek = () => selectedWeek.value = null
   transition: all 0.3s;
 }
 
-.lifeRow .item {
+.lifeRow .life-item {
   cursor: pointer;
   transition: all 0.15s;
 }
-.lifeRowHovered .item {
+.lifeRowHovered .life-item {
   transform: scale(2);
 }
 
-.lifeRowYear {
+.life-row-year {
   width: 20px
 }
 
-.lifeRowYearSpent {
+.life-row-year--spent {
   color: grey;
 }
 </style>

@@ -23,6 +23,14 @@ export function dateFormatNum(date: Date) {
     return format(date, 'dd.MM.yyyy')
 }
 
+export function dateFormatDayShort(date: Date) {
+    return format(date, "eeeeee", {locale: getLocale()})
+}
+
+export function dateFormatDayOfMonth(date: Date) {
+    return format(date, "d", {locale: getLocale()})
+}
+
 export function dateFormatDayMonth(date: Date) {
     return format(date, 'dd MMMM', {locale: getLocale()})
 }

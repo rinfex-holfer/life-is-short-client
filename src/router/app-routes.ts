@@ -1,20 +1,35 @@
-import MainPage from "../components/pages/page-main.vue";
-import Calendar from "../components/calendar/calendar.vue";
-import LifeCalendar from "../components/calendar/life-in-months.vue";
-import YearCalendar from "../components/calendar/year.vue";
-import MonthCalendar from "../components/month.vue";
-import WeekCalendar from "../components/week.vue";
+import PageMain from "../pages/PageMain.vue";
+import PageMonth from "../pages/PageMonth.vue";
+import PageLifeInMonths from "../pages/PageLifeInMonths/PageLifeInMonths.vue";
+import PageLifeInWeeks from "../pages/PageLifeInWeeks.vue";
+import {RouteRecordRaw} from "vue-router";
+
+export enum appRouteNames {
+    MAIN = "MAIN",
+    MONTH = "MONTH",
+    LIFE_IN_WEEKS = "LIFE_IN_WEEKS",
+    LIFE_IN_MONTHS = "LIFE_IN_MONTHS",
+}
 
 export const appRoutes = [
-    { path: '/', component: MainPage },
     {
-        path: '/calendar',
-        component: Calendar,
-        children: [
-            { path: '', component: LifeCalendar },
-            { path: 'year', component: YearCalendar },
-            { path: 'month/:monthNum', component: MonthCalendar },
-            { path: 'week/:weekNum', component: WeekCalendar },
-        ]
+        path: '/',
+        name: appRouteNames.MAIN,
+        component: PageMain
     },
-]
+    {
+        path: '/life-in-weeks',
+        name: appRouteNames.LIFE_IN_WEEKS,
+        component: PageLifeInWeeks
+    },
+    {
+        path: '/life-in-months',
+        name: appRouteNames.LIFE_IN_MONTHS,
+        component: PageLifeInMonths
+    },
+    {
+        path: '/months/:monthNum',
+        name: appRouteNames.MONTH,
+        component: PageMonth,
+    },
+] as RouteRecordRaw[]

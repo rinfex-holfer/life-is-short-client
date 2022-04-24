@@ -2,8 +2,8 @@
 
 import {lifeInWeeks} from "../store";
 import {computed, ref, watch} from "vue";
-import {openModal} from "./modal/open-modal";
-import {ModalKey} from "./modal/modal-key";
+import {openModal} from "./Modal/open-modal";
+import {ModalKey} from "./Modal/modal-key";
 import {DayState, LifeDayExtended, loadDays} from "../domain/services/days";
 import {dateFormatDayMonth, dateFormatNum, dateFormatYear} from "../utils/date";
 
@@ -57,5 +57,3 @@ function onDayClick(day: LifeDayExtended) {
     </span>
   </div>
 </template>
-
-<style src="calendar/calendar.css" />

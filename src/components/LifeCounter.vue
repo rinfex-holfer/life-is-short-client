@@ -20,12 +20,10 @@ const yearsSpent = computed(() => {
 </script>
 
 <template>
-  <div class="container">
-    Прожито: {{ yearsSpent }}
-    <br/>
-    Продуктивной жизни осталось: {{ productiveYearsLeft }}
-    <br/>
-    Жить осталось: {{ lifeYearsLeft }}
+  <div>
+    <div>Прожито: <b>{{ yearsSpent }}</b></div>
+    <div>Продуктивной жизни осталось: <b>{{ productiveYearsLeft }}</b></div>
+    <div>Жить осталось: <b>{{ lifeYearsLeft }}</b></div>
   </div>
 </template>
 

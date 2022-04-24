@@ -1,21 +1,19 @@
 <script lang="ts" setup>
-import Month from "../month.vue";
+import Month from "../components/Month.vue";
 import {useRouter} from "vue-router";
-import {lifeInMonths} from "../../store";
-import {LifeMonth} from "../../domain";
+import {lifeInMonths} from "../store";
+import {LifeMonth} from "../domain";
 import {computed} from "vue";
 
 const router = useRouter()
 
-const monthNumFromQuery = router.currentRoute.value.query.monthNum
-const monthNumInLife = monthNumFromQuery ? +monthNumFromQuery : 0
-
+const monthNumFromUrl = router.currentRoute.value.params.monthNum
+const monthNumInLife = monthNumFromUrl ? +monthNumFromUrl : 0
 const month = computed<LifeMonth>(() => {
   const yearOfLife = Math.floor(monthNumInLife / 12)
   const selectedMonth = lifeInMonths.value[yearOfLife].months.find(m => m.numInLife === monthNumInLife)
 
   if (!selectedMonth) {
-    console.error("wrong month url")
     const lastYear = lifeInMonths.value[lifeInMonths.value.length - 1]
     return lastYear.months[lastYear.months.length - 1]
   }
@@ -28,7 +26,3 @@ const month = computed<LifeMonth>(() => {
 <template>
 <Month :month="month" />
 </template>
-
-<style scoped>
-
-</style>
