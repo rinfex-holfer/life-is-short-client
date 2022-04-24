@@ -8,7 +8,7 @@ import {appRouteNames} from "../router/app-routes";
     <div class="page-main">
       <LifeCounter/>
       <ul class="navigation">
-        <li><router-link :to="{name: appRouteNames.LIFE_IN_WEEKS}" class="button nav-button">Недели</router-link></li>
+        <li><router-link :to="{name: appRouteNames.LIFE_IN_WEEKS}" class="button nav-button desktop-only">Недели</router-link></li>
         <li><router-link :to="{name: appRouteNames.LIFE_IN_MONTHS}" class="button nav-button">Месяцы</router-link></li>
       </ul>
     </div>
@@ -23,9 +23,21 @@ import {appRouteNames} from "../router/app-routes";
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
 
-  .nav-button {
-    //display: block;
+.nav-button {
+  display: block;
+  width: fit-content;
+  margin: 10px auto;
+}
+
+@media (max-width: 900px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .navigation {
+    flex-direction: column;
   }
 }
 </style>
