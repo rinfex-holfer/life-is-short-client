@@ -8,8 +8,9 @@ body {
 }
 
 .full-page-container {
-    min-height: 100vh;
     min-width: 100vw;
+    min-height: 100vh;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -108,4 +109,13 @@ body {
 .weekTitle {
     text-align: center;
     padding-top: 15px;
+}
+
+.anim-pulse {
+    animation: pulse .5s infinite alternate;
+    transform-origin: center;
+}
+
+@keyframes pulse {
+    to { transform: scale(1.4); }
 }

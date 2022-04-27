@@ -79,6 +79,7 @@ const deselectMonth = () => selectedMonth.value = null
             class="life-item life-item--medium life-in-months__item"
             :class="{
             'life-item--active': month.numInLife === currentLifeMonthNumber,
+            'anim-pulse': month.numInLife === currentLifeMonthNumber,
             'life-item--spent': month.numInLife < currentLifeMonthNumber,
             'life-item--selected': month.numInLife === selectedMonth
           }"
