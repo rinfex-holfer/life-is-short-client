@@ -12,7 +12,9 @@ const daysMock = [
 ]
 
 export async function getDays(startDay: string, endDay: string): Promise<LifeDay[]> {
-    await pause(100)
+    const res = await fetch("http://localhost:5000/days")
+    const resJson = await res.json()
+    // await pause(100)
 
     return Promise.resolve(daysMock)
 }
