@@ -41,3 +41,11 @@ jobs:
           tag_name: ${{ steps.tag.outputs.release_tag }}
           files: "$GITHUB_WORKSPACE/client-dist"
 
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT }}
+          repository: rinfex-holfer/life-is-short-server
+          event-type: new-client-release
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+
