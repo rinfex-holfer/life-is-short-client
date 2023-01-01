@@ -45,7 +45,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v2
         with:
           token: ${{ secrets.LIS_DEPLOY_TOKEN }}
-          repository: rinfex-holfer/life-is-short-server
+          repository: rinfex-holfer/life-is-short
           event-type: new-client-release
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
 
