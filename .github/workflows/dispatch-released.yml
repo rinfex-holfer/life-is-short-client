@@ -1,0 +1,16 @@
+name: build-and-deploy
+on:
+  release:
+    types: [ published ]
+jobs:
+  dispatch-released:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.LIS_DEPLOY_TOKEN }}
+          repository: rinfex-holfer/life-is-short
+          event-type: new-client-release
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+
