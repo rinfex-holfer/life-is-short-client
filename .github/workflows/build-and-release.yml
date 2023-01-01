@@ -44,7 +44,7 @@ jobs:
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v2
         with:
-          token: ${{ secrets.lis-deploy-token }}
+          token: ${{ secrets.LIS_DEPLOY_TOKEN }}
           repository: rinfex-holfer/life-is-short-server
           event-type: new-client-release
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
