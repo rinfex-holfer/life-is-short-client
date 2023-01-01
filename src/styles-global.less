@@ -1,3 +1,5 @@
+@import "constants.less";
+
 * {
     box-sizing: border-box;
 }
@@ -29,8 +31,6 @@ body {
         text-align: center;
     }
 }
-
-
 
 .calendar {
     display: flex;
@@ -75,8 +75,9 @@ body {
     }
 
     &--spent {
-        color: dimgray;
-        border-color: gray;
+        //color: dimgray;
+        //border-color: gray;
+        opacity: var(--spent-figure-opacity);
     }
 
     &--active {
@@ -95,8 +96,15 @@ body {
         background: rgba(0, 0, 0, 0.5);
         border-color: rgba(0, 0, 0, 0.5);
     }
-}
 
+    &--half-left {
+        border-radius: 50% 0 0 50%;
+    }
+
+    &--half-right {
+        border-radius: 0 50% 50% 0;
+    }
+}
 
 .weekContainer {
     box-sizing: border-box;
@@ -112,10 +120,12 @@ body {
 }
 
 .anim-pulse {
-    animation: pulse .5s infinite alternate;
+    animation: pulse 0.5s infinite alternate;
     transform-origin: center;
 }
 
 @keyframes pulse {
-    to { transform: scale(1.4); }
+    to {
+        transform: scale(1.4);
+    }
 }
