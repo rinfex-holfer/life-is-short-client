@@ -22,11 +22,11 @@ jobs:
           run_install: |
             - recursive: true
 
-      - name: Build client-dist
+      - name: Build dist
         run: pnpm build
 
-      - name: Check
-        run: ls "$GITHUB_WORKSPACE/client-dist"
+      - name: Zip dist
+        run: zip -r dist.zip dist
 
       - name: Generate release tag
         id: tag
@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.tag.outputs.release_tag }}
-          files: "client-dist/**/*"
+          files: "dist.zip"
 
   dispatch-released:
     runs-on: ubuntu-latest

@@ -1,6 +1,6 @@
 .idea
 node_modules
-client-dist
+dist
 build
 coverage
 .DS_Store
