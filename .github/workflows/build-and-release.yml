@@ -26,7 +26,7 @@ jobs:
         run: pnpm build
 
       - name: Zip dist
-        run: zip client-dist.zip dist/**/*
+        run: zip -r client-dist.zip client-dist
 
       - name: Generate release tag
         id: tag
